@@ -1,16 +1,27 @@
 import importlib.util, os, csv
 
-# MR1: Permutation Invariance
+import random
+
+# MR1: Reversal Relation
+# Description: If the input list L is reversed to create a follow-up list L',
+# the sorted version of both lists must be identical.
+# Relation: BubbleSort(Reverse(L)) = BubbleSort(L)
 def MR1_source(arr): return arr
 
 def MR1_follow_up(arr): return arr[::-1]
 
-# MR2: Addition Relation
+# MR2: Permutation Relation
+# Description: If the input list L is randomly shuffled (permuted) to create a follow-up list L',
+# the sorted output must remain the same.
+# Relation: BubbleSort(Permute(L)) = BubbleSort(L)
 def MR2_source(arr): return arr
 
-def MR2_follow_up(arr, constant=10): return [x + constant for x in arr]
+def MR2_follow_up(arr):
+    permuted = arr.copy()
+    random.shuffle(permuted)
+    return permuted
 
-# MR1: Permutation Invariance - 5 test groups
+# MR1: Reversal Relation - 5 test groups
 MR1_TEST_GROUPS = [
     [3, 1, 2, 5, 4],              # MTG1: Small unsorted array
     [1, 1, 1, 1],                 # MTG2: All duplicates
@@ -19,13 +30,13 @@ MR1_TEST_GROUPS = [
     list(range(20, 0, -1)),       # MTG5: Large reverse sorted (20 elements)
 ]
 
-# MR2: Addition Relation - 5 test groups
+# MR2: Permutation Relation - 5 test groups
 MR2_TEST_GROUPS = [
-    [8, 3, 5, 1, 9],              # MTG1: Different unsorted array
-    [7, 7, 7],                    # MTG2: All same (smaller size)
-    [-10, -5, 0, 5, 10],          # MTG3: Symmetric around zero
-    [100, 50, 75, 25],            # MTG4: Larger values
-    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],  # MTG5: Already sorted sequence
+    [7, 2, 9, 1, 5],              # MTG1: Different unsorted array
+    [10, 10, 8, 8, 6],            # MTG2: Pairs of duplicates
+    [-5, -10, 0, 5, 10],          # MTG3: Symmetric around zero
+    [100, 1, 50, 25, 75],         # MTG4: Large value range
+    list(range(1, 16)),           # MTG5: Sequential numbers
 ]
 
 def load_function(path, func_name):
@@ -85,7 +96,7 @@ def run_tests(source_file, mutant_dir, outdir):
                 
                 for idx, tg in enumerate(test_groups):
                     if MR_name == "MR1":
-                        # Permutation: sort(arr) == sort(reverse(arr))
+                        # Reversal Relation: sort(arr) == sort(reverse(arr))
                         SO = apply_sort(mutant_sort, tg)
                         FO = apply_sort(mutant_sort, tg[::-1])
                         all_results[mutant_label]["MR1"]["SO"].append(SO)
@@ -93,18 +104,14 @@ def run_tests(source_file, mutant_dir, outdir):
                         if SO != FO:
                             mutant_killed = True
                     else:
-                        # Addition: sort(arr) with constant added should match
-                        constant = 10
+                        # Permutation Relation: sort(arr) == sort(permute(arr))
                         SO = apply_sort(mutant_sort, tg)
-                        FO = apply_sort(mutant_sort, [x + constant for x in tg])
-                        # Adjust FO by subtracting constant
-                        if FO is not None:
-                            FO_adjusted = [x - constant for x in FO]
-                        else:
-                            FO_adjusted = None
+                        permuted = tg.copy()
+                        random.shuffle(permuted)
+                        FO = apply_sort(mutant_sort, permuted)
                         all_results[mutant_label]["MR2"]["SO"].append(SO)
-                        all_results[mutant_label]["MR2"]["FO"].append(FO_adjusted)
-                        if SO != FO_adjusted:
+                        all_results[mutant_label]["MR2"]["FO"].append(FO)
+                        if SO != FO:
                             mutant_killed = True
 
             mut_writer.writerow([mutant_label, "K" if mutant_killed else "S"])
