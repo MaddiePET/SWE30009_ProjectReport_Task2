@@ -40,7 +40,7 @@ def main():
 
     os.makedirs(args.outdir, exist_ok=True)
 
-    for i in range(args.count):
+    for i in range(1, args.count + 1):
         mutated = generate_mutant(original)
         with open(os.path.join(args.outdir, f"mutant_{i}.py"), "w") as f:
             f.write(mutated)
