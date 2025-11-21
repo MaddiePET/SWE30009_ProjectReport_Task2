@@ -13,16 +13,8 @@ def test_iterative_mr1_basic():
     assert result1 == result2
 
 
-def test_iterative_mr1_reverse_sorted():
-    """MR1: Reverse sorted array permutation"""
-    arr = [10, 9, 8, 7, 6]
-    result1 = bubble_sort_iterative(arr.copy())
-    result2 = bubble_sort_iterative(arr[::-1])
-    assert result1 == result2
-
-
-def test_iterative_mr1_duplicates():
-    """MR1: Array with duplicates permutation"""
+def test_iterative_mr1_all_duplicates():
+    """MR1: All duplicates permutation"""
     arr = [1, 1, 1, 1]
     result1 = bubble_sort_iterative(arr.copy())
     result2 = bubble_sort_iterative(arr[::-1])
@@ -32,6 +24,14 @@ def test_iterative_mr1_duplicates():
 def test_iterative_mr1_negative():
     """MR1: Negative numbers permutation"""
     arr = [5, -1, 4, -2, 0]
+    result1 = bubble_sort_iterative(arr.copy())
+    result2 = bubble_sort_iterative(arr[::-1])
+    assert result1 == result2
+
+
+def test_iterative_mr1_multiple_duplicates():
+    """MR1: Multiple duplicates permutation"""
+    arr = [2, 2, 1, 3, 3, 1]
     result1 = bubble_sort_iterative(arr.copy())
     result2 = bubble_sort_iterative(arr[::-1])
     assert result1 == result2
@@ -58,18 +58,8 @@ def test_iterative_mr2_basic():
     assert result1 == result2_adjusted
 
 
-def test_iterative_mr2_reverse_sorted():
-    """MR2: Reverse sorted array addition"""
-    arr = [10, 9, 8, 7, 6]
-    constant = 5
-    result1 = bubble_sort_iterative(arr.copy())
-    result2 = bubble_sort_iterative([x + constant for x in arr])
-    result2_adjusted = [x - constant for x in result2]
-    assert result1 == result2_adjusted
-
-
-def test_iterative_mr2_duplicates():
-    """MR2: Array with duplicates addition"""
+def test_iterative_mr2_all_duplicates():
+    """MR2: All duplicates addition"""
     arr = [1, 1, 1, 1]
     constant = 100
     result1 = bubble_sort_iterative(arr.copy())
@@ -82,6 +72,16 @@ def test_iterative_mr2_negative():
     """MR2: Negative numbers addition"""
     arr = [5, -1, 4, -2, 0]
     constant = 20
+    result1 = bubble_sort_iterative(arr.copy())
+    result2 = bubble_sort_iterative([x + constant for x in arr])
+    result2_adjusted = [x - constant for x in result2]
+    assert result1 == result2_adjusted
+
+
+def test_iterative_mr2_multiple_duplicates():
+    """MR2: Multiple duplicates addition"""
+    arr = [2, 2, 1, 3, 3, 1]
+    constant = 15
     result1 = bubble_sort_iterative(arr.copy())
     result2 = bubble_sort_iterative([x + constant for x in arr])
     result2_adjusted = [x - constant for x in result2]
@@ -108,16 +108,8 @@ def test_recursive_mr1_basic():
     assert result1 == result2
 
 
-def test_recursive_mr1_reverse_sorted():
-    """MR1: Reverse sorted array permutation"""
-    arr = [10, 9, 8, 7, 6]
-    result1 = bubble_sort_recursive(arr.copy())
-    result2 = bubble_sort_recursive(arr[::-1])
-    assert result1 == result2
-
-
-def test_recursive_mr1_duplicates():
-    """MR1: Array with duplicates permutation"""
+def test_recursive_mr1_all_duplicates():
+    """MR1: All duplicates permutation"""
     arr = [1, 1, 1, 1]
     result1 = bubble_sort_recursive(arr.copy())
     result2 = bubble_sort_recursive(arr[::-1])
@@ -127,6 +119,14 @@ def test_recursive_mr1_duplicates():
 def test_recursive_mr1_negative():
     """MR1: Negative numbers permutation"""
     arr = [5, -1, 4, -2, 0]
+    result1 = bubble_sort_recursive(arr.copy())
+    result2 = bubble_sort_recursive(arr[::-1])
+    assert result1 == result2
+
+
+def test_recursive_mr1_multiple_duplicates():
+    """MR1: Multiple duplicates permutation"""
+    arr = [2, 2, 1, 3, 3, 1]
     result1 = bubble_sort_recursive(arr.copy())
     result2 = bubble_sort_recursive(arr[::-1])
     assert result1 == result2
@@ -152,18 +152,8 @@ def test_recursive_mr2_basic():
     assert result1 == result2_adjusted
 
 
-def test_recursive_mr2_reverse_sorted():
-    """MR2: Reverse sorted array addition"""
-    arr = [10, 9, 8, 7, 6]
-    constant = 5
-    result1 = bubble_sort_recursive(arr.copy())
-    result2 = bubble_sort_recursive([x + constant for x in arr])
-    result2_adjusted = [x - constant for x in result2]
-    assert result1 == result2_adjusted
-
-
-def test_recursive_mr2_duplicates():
-    """MR2: Array with duplicates addition"""
+def test_recursive_mr2_all_duplicates():
+    """MR2: All duplicates addition"""
     arr = [1, 1, 1, 1]
     constant = 100
     result1 = bubble_sort_recursive(arr.copy())
@@ -176,6 +166,16 @@ def test_recursive_mr2_negative():
     """MR2: Negative numbers addition"""
     arr = [5, -1, 4, -2, 0]
     constant = 20
+    result1 = bubble_sort_recursive(arr.copy())
+    result2 = bubble_sort_recursive([x + constant for x in arr])
+    result2_adjusted = [x - constant for x in result2]
+    assert result1 == result2_adjusted
+
+
+def test_recursive_mr2_multiple_duplicates():
+    """MR2: Multiple duplicates addition"""
+    arr = [2, 2, 1, 3, 3, 1]
+    constant = 15
     result1 = bubble_sort_recursive(arr.copy())
     result2 = bubble_sort_recursive([x + constant for x in arr])
     result2_adjusted = [x - constant for x in result2]

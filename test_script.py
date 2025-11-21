@@ -11,11 +11,11 @@ def MR2_source(arr): return arr
 def MR2_follow_up(arr, constant=10): return [x + constant for x in arr]
 
 TEST_GROUPS = [
-    [3,1,2,5,4],
-    [10,9,8,7,6],
-    [1,1,1,1],
-    [5,-1,4,-2,0],
-    list(range(20,0,-1)),
+    [3, 1, 2, 5, 4],              # MTG1: Small unsorted array
+    [1, 1, 1, 1],                 # MTG2: All duplicates (edge case)
+    [5, -1, 4, -2, 0],            # MTG3: Mixed positive, negative, and zero
+    [2, 2, 1, 3, 3, 1],           # MTG4: Multiple duplicates
+    list(range(20, 0, -1)),       # MTG5: Large reverse sorted (20 elements)
 ]
 
 def load_function(path, func_name):
