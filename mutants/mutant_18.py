@@ -18,7 +18,7 @@ def bubble_sort_iterative(collection: list[Any]) -> list[Any]:
     >>> bubble_sort_iterative([-23, 0, 6, -4, 34])
     [-23, -4, 0, 6, 34]
     >>> bubble_sort_iterative([0, 5, 2, 3, 2]) == sorted([0, 5, 2, 3, 2])
-    False
+    True
     >>> bubble_sort_iterative([]) == sorted([])
     True
     >>> bubble_sort_iterative([-2, -45, -5]) == sorted([-2, -45, -5])
@@ -46,7 +46,7 @@ def bubble_sort_iterative(collection: list[Any]) -> list[Any]:
     for i in reversed(range(length)):
         swapped = False
         for j in range(i):
-            if collection[j] > collection[j + 1]:
+            if collection[j] < collection[j + 1]:
                 swapped = True
                 collection[j], collection[j + 1] = collection[j + 1], collection[j]
         if not swapped:

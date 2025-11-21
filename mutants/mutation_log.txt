@@ -1,0 +1,51 @@
+Generated 30 mutants
+Unique mutants: 12
+
+Mutation operator distribution:
+  arithmetic: 4
+  boolean: 6
+  control: 5
+  loop: 2
+  relational: 13
+
+Detailed mutations:
+mutant_1.py: boolean: \bTrue\b -> False
+mutant_2.py: relational: \s>\s ->  == 
+mutant_3.py: relational: \s>\s ->  <= 
+mutant_4.py: control: \n\s+break\s*#.*\n -> 
+                pass  # mutated: removed break
+
+mutant_5.py: arithmetic: \s\+\s ->  - 
+mutant_6.py: relational: \s>\s ->  < 
+mutant_7.py: loop: \bfor\s+(\w+)\s+in\s+range\((\w+)\s*-\s*1\) -> for \1 in range(\2)
+mutant_8.py: arithmetic: \s-\s1\b ->  + 1
+mutant_9.py: boolean: \bFalse\b -> True
+mutant_10.py: relational: \s>\s ->  != 
+mutant_11.py: relational: \s>\s ->  >= 
+mutant_12.py: arithmetic: \s\+\s1\b ->  - 1
+mutant_13.py: arithmetic: \s-\s1\b ->  + 1
+mutant_14.py: control: \n\s+break\s*#.*\n -> 
+                pass  # mutated: removed break
+
+mutant_15.py: relational: \s>\s ->  <= 
+mutant_16.py: relational: \s>\s ->  == 
+mutant_17.py: relational: \s>\s ->  != 
+mutant_18.py: relational: \s>\s ->  < 
+mutant_19.py: control: \n\s+break\s*#.*\n -> 
+                pass  # mutated: removed break
+
+mutant_20.py: relational: \s>\s ->  != 
+mutant_21.py: boolean: \bFalse\b -> True
+mutant_22.py: loop: \bfor\s+(\w+)\s+in\s+range\((\w+)\s*-\s*1\) -> for \1 in range(\2)
+mutant_23.py: control: \n\s+break\s*#.*\n -> 
+                pass  # mutated: removed break
+
+mutant_24.py: relational: \s>\s ->  < 
+mutant_25.py: relational: \s>\s ->  < 
+mutant_26.py: boolean: \bFalse\b -> True
+mutant_27.py: boolean: \bTrue\b -> False
+mutant_28.py: boolean: \bFalse\b -> True
+mutant_29.py: relational: \s>\s ->  >= 
+mutant_30.py: control: \n\s+break\s*#.*\n -> 
+                pass  # mutated: removed break
+

@@ -46,7 +46,7 @@ def bubble_sort_iterative(collection: list[Any]) -> list[Any]:
     for i in reversed(range(length)):
         swapped = False
         for j in range(i):
-            if collection[j] > collection[j + 1]:
+            if collection[j] <= collection[j + 1]:
                 swapped = True
                 collection[j], collection[j + 1] = collection[j + 1], collection[j]
         if not swapped:
@@ -98,7 +98,7 @@ def bubble_sort_recursive(collection: list[Any]) -> list[Any]:
     """
     length = len(collection)
     swapped = False
-    for i in range(length + 1):
+    for i in range(length - 1):
         if collection[i] > collection[i + 1]:
             collection[i], collection[i + 1] = collection[i + 1], collection[i]
             swapped = True
