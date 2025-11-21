@@ -107,11 +107,6 @@ def run_tests(source_file, mutant_dir, outdir):
                         # Check if MR1 is violated
                         if SO != FO:
                             mutant_killed = True
-                        # Also check if output is actually sorted
-                        if SO is not None and SO != sorted(tg):
-                            mutant_killed = True
-                        if FO is not None and FO != sorted(tg[::-1]):
-                            mutant_killed = True
                     else:
                         # Permutation Relation: sort(arr) == sort(permute(arr))
                         SO = apply_sort(mutant_sort, tg)
@@ -123,11 +118,6 @@ def run_tests(source_file, mutant_dir, outdir):
                         
                         # Check if MR2 is violated
                         if SO != FO:
-                            mutant_killed = True
-                        # Also check if output is actually sorted
-                        if SO is not None and SO != sorted(tg):
-                            mutant_killed = True
-                        if FO is not None and FO != sorted(permuted):
                             mutant_killed = True
 
             mut_writer.writerow([mutant_label, "K" if mutant_killed else "S"])

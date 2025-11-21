@@ -1,1 +1,1 @@
-Killed: 12/30 mutants (Score = 0.40)
+Killed: 6/30 mutants (Score = 0.20)

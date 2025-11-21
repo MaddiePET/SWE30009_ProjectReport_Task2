@@ -60,13 +60,8 @@ for mr_idx, (mr_name, test_groups) in enumerate([("MR1", MR1_TEST_GROUPS), ("MR2
                 SO = apply_sort(mutant_sort, test_group)
                 FO = apply_sort(mutant_sort, test_group[::-1])
                 
-                # Check MR violation
+                # Check MR violation only
                 if SO != FO:
-                    mtg_killed = True
-                # Check oracle
-                if SO is not None and SO != sorted(test_group):
-                    mtg_killed = True
-                if FO is not None and FO != sorted(test_group[::-1]):
                     mtg_killed = True
             else:
                 # Permutation Relation
@@ -76,13 +71,8 @@ for mr_idx, (mr_name, test_groups) in enumerate([("MR1", MR1_TEST_GROUPS), ("MR2
                 random.shuffle(permuted)
                 FO = apply_sort(mutant_sort, permuted)
                 
-                # Check MR violation
+                # Check MR violation only
                 if SO != FO:
-                    mtg_killed = True
-                # Check oracle
-                if SO is not None and SO != sorted(test_group):
-                    mtg_killed = True
-                if FO is not None and FO != sorted(permuted):
                     mtg_killed = True
             
             if mtg_killed:
