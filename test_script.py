@@ -10,12 +10,22 @@ def MR2_source(arr): return arr
 
 def MR2_follow_up(arr, constant=10): return [x + constant for x in arr]
 
-TEST_GROUPS = [
+# MR1: Permutation Invariance - 5 test groups
+MR1_TEST_GROUPS = [
     [3, 1, 2, 5, 4],              # MTG1: Small unsorted array
-    [1, 1, 1, 1],                 # MTG2: All duplicates (edge case)
-    [5, -1, 4, -2, 0],            # MTG3: Mixed positive, negative, and zero
+    [1, 1, 1, 1],                 # MTG2: All duplicates
+    [5, -1, 4, -2, 0],            # MTG3: Mixed positive, negative, zero
     [2, 2, 1, 3, 3, 1],           # MTG4: Multiple duplicates
     list(range(20, 0, -1)),       # MTG5: Large reverse sorted (20 elements)
+]
+
+# MR2: Addition Relation - 5 test groups
+MR2_TEST_GROUPS = [
+    [8, 3, 5, 1, 9],              # MTG1: Different unsorted array
+    [7, 7, 7],                    # MTG2: All same (smaller size)
+    [-10, -5, 0, 5, 10],          # MTG3: Symmetric around zero
+    [100, 50, 75, 25],            # MTG4: Larger values
+    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],  # MTG5: Already sorted sequence
 ]
 
 def load_function(path, func_name):
@@ -70,16 +80,14 @@ def run_tests(source_file, mutant_dir, outdir):
             mutant_killed = False
             all_results[mutant_label] = {"MR1": {"SO": [], "FO": []}, "MR2": {"SO": [], "FO": []}}
 
-            for MR_name, (src, follow) in {
-                "MR1": (MR1_source, MR1_follow_up),
-                "MR2": (MR2_source, MR2_follow_up)
-            }.items():
-
-                for idx, tg in enumerate(TEST_GROUPS):
+            for MR_name in ["MR1", "MR2"]:
+                test_groups = MR1_TEST_GROUPS if MR_name == "MR1" else MR2_TEST_GROUPS
+                
+                for idx, tg in enumerate(test_groups):
                     if MR_name == "MR1":
                         # Permutation: sort(arr) == sort(reverse(arr))
-                        SO = apply_sort(mutant_sort, src(tg))
-                        FO = apply_sort(mutant_sort, follow(tg))
+                        SO = apply_sort(mutant_sort, tg)
+                        FO = apply_sort(mutant_sort, tg[::-1])
                         all_results[mutant_label]["MR1"]["SO"].append(SO)
                         all_results[mutant_label]["MR1"]["FO"].append(FO)
                         if SO != FO:
@@ -87,8 +95,8 @@ def run_tests(source_file, mutant_dir, outdir):
                     else:
                         # Addition: sort(arr) with constant added should match
                         constant = 10
-                        SO = apply_sort(mutant_sort, src(tg))
-                        FO = apply_sort(mutant_sort, follow(tg, constant))
+                        SO = apply_sort(mutant_sort, tg)
+                        FO = apply_sort(mutant_sort, [x + constant for x in tg])
                         # Adjust FO by subtracting constant
                         if FO is not None:
                             FO_adjusted = [x - constant for x in FO]
@@ -107,7 +115,7 @@ def run_tests(source_file, mutant_dir, outdir):
         
         # MR1 Table
         writer.writerow(["MR1"])
-        header = ["ID", "Output"] + [f"MTG{i+1}" for i in range(len(TEST_GROUPS))]
+        header = ["ID", "Output"] + [f"MTG{i+1}" for i in range(len(MR1_TEST_GROUPS))]
         writer.writerow(header)
         
         for mutant_label in sorted(all_results.keys(), key=lambda x: int(x[1:])):
@@ -119,6 +127,7 @@ def run_tests(source_file, mutant_dir, outdir):
         
         # MR2 Table
         writer.writerow(["MR2"])
+        header = ["ID", "Output"] + [f"MTG{i+1}" for i in range(len(MR2_TEST_GROUPS))]
         writer.writerow(header)
         
         for mutant_label in sorted(all_results.keys(), key=lambda x: int(x[1:])):
