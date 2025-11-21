@@ -22,21 +22,23 @@ def MR2_follow_up(arr):
     return permuted
 
 # MR1: Reversal Relation - 5 test groups
+# These groups are designed to expose mutants that change comparison operators
 MR1_TEST_GROUPS = [
-    [3, 1, 2, 5, 4],              # MTG1: Small unsorted array
-    [1, 1, 1, 1],                 # MTG2: All duplicates
-    [5, -1, 4, -2, 0],            # MTG3: Mixed positive, negative, zero
-    [2, 2, 1, 3, 3, 1],           # MTG4: Multiple duplicates
-    list(range(20, 0, -1)),       # MTG5: Large reverse sorted (20 elements)
+    [5, 3, 8, 1, 9, 2],           # MTG1: Unsorted with distinct values
+    [4, 2, 4, 2, 4],              # MTG2: Alternating duplicates
+    [-3, 5, -1, 8, 0, -2],        # MTG3: Mixed pos/neg requiring many swaps
+    [10, 5, 15, 3, 12, 7, 1],     # MTG4: Large range, needs proper comparisons
+    [6, 5, 4, 3, 2, 1],           # MTG5: Reverse sorted (worst case)
 ]
 
 # MR2: Permutation Relation - 5 test groups
+# Different arrays to catch comparison and loop boundary errors
 MR2_TEST_GROUPS = [
-    [7, 2, 9, 1, 5],              # MTG1: Different unsorted array
-    [10, 10, 8, 8, 6],            # MTG2: Pairs of duplicates
-    [-5, -10, 0, 5, 10],          # MTG3: Symmetric around zero
-    [100, 1, 50, 25, 75],         # MTG4: Large value range
-    list(range(1, 16)),           # MTG5: Sequential numbers
+    [9, 3, 7, 1, 5, 2, 8],        # MTG1: Many comparisons needed
+    [3, 3, 1, 1, 2, 2],           # MTG2: Duplicate pairs needing stable sort
+    [-8, 4, -2, 9, -5, 1],        # MTG3: Mixed signs, many swaps
+    [12, 4, 16, 8, 2, 14, 6],     # MTG4: Even numbers, wide range
+    [7, 6, 5, 4, 3, 2, 1, 0],     # MTG5: Longer reverse sequence
 ]
 
 def load_function(path, func_name):
@@ -101,7 +103,14 @@ def run_tests(source_file, mutant_dir, outdir):
                         FO = apply_sort(mutant_sort, tg[::-1])
                         all_results[mutant_label]["MR1"]["SO"].append(SO)
                         all_results[mutant_label]["MR1"]["FO"].append(FO)
+                        
+                        # Check if MR1 is violated
                         if SO != FO:
+                            mutant_killed = True
+                        # Also check if output is actually sorted
+                        if SO is not None and SO != sorted(tg):
+                            mutant_killed = True
+                        if FO is not None and FO != sorted(tg[::-1]):
                             mutant_killed = True
                     else:
                         # Permutation Relation: sort(arr) == sort(permute(arr))
@@ -111,10 +120,19 @@ def run_tests(source_file, mutant_dir, outdir):
                         FO = apply_sort(mutant_sort, permuted)
                         all_results[mutant_label]["MR2"]["SO"].append(SO)
                         all_results[mutant_label]["MR2"]["FO"].append(FO)
+                        
+                        # Check if MR2 is violated
                         if SO != FO:
+                            mutant_killed = True
+                        # Also check if output is actually sorted
+                        if SO is not None and SO != sorted(tg):
+                            mutant_killed = True
+                        if FO is not None and FO != sorted(permuted):
                             mutant_killed = True
 
             mut_writer.writerow([mutant_label, "K" if mutant_killed else "S"])
+            if mutant_killed:
+                killed += 1
     
     # Write formatted CSV with separate tables for MR1 and MR2
     with open(so_fo_path, "w", newline="") as sofo:
@@ -141,8 +159,6 @@ def run_tests(source_file, mutant_dir, outdir):
             if "MR2" in all_results[mutant_label]:
                 writer.writerow([mutant_label, "SO"] + all_results[mutant_label]["MR2"]["SO"])
                 writer.writerow(["", "FO"] + all_results[mutant_label]["MR2"]["FO"])
-            if mutant_killed:
-                killed += 1
 
     with open(os.path.join(outdir, "mutation_score.txt"), "w") as f:
         f.write(f"Killed: {killed}/{total} mutants (Score = {killed/total:.2f})")

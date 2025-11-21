@@ -7,13 +7,13 @@ from bubble_sort import bubble_sort_iterative, bubble_sort_recursive
 # the sorted version of both lists must be identical.
 # Relation: BubbleSort(Reverse(L)) = BubbleSort(L)
 
-# Test groups for MR1
+# Test groups for MR1 - designed to expose mutants with comparison operator changes
 MR1_TEST_GROUPS = [
-    [3, 1, 2, 5, 4],
-    [1, 1, 1, 1],
-    [5, -1, 4, -2, 0],
-    [2, 2, 1, 3, 3, 1],
-    list(range(20, 0, -1)),
+    [5, 3, 8, 1, 9, 2],           # MTG1: Unsorted with distinct values
+    [4, 2, 4, 2, 4],              # MTG2: Alternating duplicates
+    [-3, 5, -1, 8, 0, -2],        # MTG3: Mixed pos/neg requiring many swaps
+    [10, 5, 15, 3, 12, 7, 1],     # MTG4: Large range, needs proper comparisons
+    [6, 5, 4, 3, 2, 1],           # MTG5: Reverse sorted (worst case)
 ]
 
 def test_iterative_mr1_basic():
@@ -21,7 +21,10 @@ def test_iterative_mr1_basic():
     arr = MR1_TEST_GROUPS[0]
     result1 = bubble_sort_iterative(arr.copy())
     result2 = bubble_sort_iterative(arr[::-1])
+    # MR1: Reversal relation
     assert result1 == result2
+    # Oracle: Result must be sorted
+    assert result1 == sorted(arr)
 
 
 def test_iterative_mr1_all_duplicates():
@@ -30,6 +33,7 @@ def test_iterative_mr1_all_duplicates():
     result1 = bubble_sort_iterative(arr.copy())
     result2 = bubble_sort_iterative(arr[::-1])
     assert result1 == result2
+    assert result1 == sorted(arr)
 
 
 def test_iterative_mr1_negative():
@@ -38,6 +42,7 @@ def test_iterative_mr1_negative():
     result1 = bubble_sort_iterative(arr.copy())
     result2 = bubble_sort_iterative(arr[::-1])
     assert result1 == result2
+    assert result1 == sorted(arr)
 
 
 def test_iterative_mr1_multiple_duplicates():
@@ -46,6 +51,7 @@ def test_iterative_mr1_multiple_duplicates():
     result1 = bubble_sort_iterative(arr.copy())
     result2 = bubble_sort_iterative(arr[::-1])
     assert result1 == result2
+    assert result1 == sorted(arr)
 
 
 def test_iterative_mr1_large():
@@ -54,6 +60,7 @@ def test_iterative_mr1_large():
     result1 = bubble_sort_iterative(arr.copy())
     result2 = bubble_sort_iterative(arr[::-1])
     assert result1 == result2
+    assert result1 == sorted(arr)
 
 
 # ============= METAMORPHIC RELATION 2: PERMUTATION RELATION =============
@@ -65,11 +72,11 @@ def test_iterative_mr1_large():
 import random
 
 MR2_TEST_GROUPS = [
-    [7, 2, 9, 1, 5],
-    [10, 10, 8, 8, 6],
-    [-5, -10, 0, 5, 10],
-    [100, 1, 50, 25, 75],
-    list(range(1, 16)),
+    [9, 3, 7, 1, 5, 2, 8],        # MTG1: Many comparisons needed
+    [3, 3, 1, 1, 2, 2],           # MTG2: Duplicate pairs needing stable sort
+    [-8, 4, -2, 9, -5, 1],        # MTG3: Mixed signs, many swaps
+    [12, 4, 16, 8, 2, 14, 6],     # MTG4: Even numbers, wide range
+    [7, 6, 5, 4, 3, 2, 1, 0],     # MTG5: Longer reverse sequence
 ]
 
 def test_iterative_mr2_basic():
@@ -80,6 +87,7 @@ def test_iterative_mr2_basic():
     random.shuffle(permuted)
     result2 = bubble_sort_iterative(permuted)
     assert result1 == result2
+    assert result1 == sorted(arr)
 
 
 def test_iterative_mr2_all_duplicates():
@@ -90,6 +98,7 @@ def test_iterative_mr2_all_duplicates():
     random.shuffle(permuted)
     result2 = bubble_sort_iterative(permuted)
     assert result1 == result2
+    assert result1 == sorted(arr)
 
 
 def test_iterative_mr2_negative():
@@ -100,6 +109,7 @@ def test_iterative_mr2_negative():
     random.shuffle(permuted)
     result2 = bubble_sort_iterative(permuted)
     assert result1 == result2
+    assert result1 == sorted(arr)
 
 
 def test_iterative_mr2_multiple_duplicates():
@@ -110,6 +120,7 @@ def test_iterative_mr2_multiple_duplicates():
     random.shuffle(permuted)
     result2 = bubble_sort_iterative(permuted)
     assert result1 == result2
+    assert result1 == sorted(arr)
 
 
 def test_iterative_mr2_large():
@@ -120,6 +131,7 @@ def test_iterative_mr2_large():
     random.shuffle(permuted)
     result2 = bubble_sort_iterative(permuted)
     assert result1 == result2
+    assert result1 == sorted(arr)
 
 
 # ============= RECURSIVE VERSION - MR1: REVERSAL RELATION =============
@@ -130,6 +142,7 @@ def test_recursive_mr1_basic():
     result1 = bubble_sort_recursive(arr.copy())
     result2 = bubble_sort_recursive(arr[::-1])
     assert result1 == result2
+    assert result1 == sorted(arr)
 
 
 def test_recursive_mr1_all_duplicates():
@@ -138,6 +151,7 @@ def test_recursive_mr1_all_duplicates():
     result1 = bubble_sort_recursive(arr.copy())
     result2 = bubble_sort_recursive(arr[::-1])
     assert result1 == result2
+    assert result1 == sorted(arr)
 
 
 def test_recursive_mr1_negative():
@@ -146,6 +160,7 @@ def test_recursive_mr1_negative():
     result1 = bubble_sort_recursive(arr.copy())
     result2 = bubble_sort_recursive(arr[::-1])
     assert result1 == result2
+    assert result1 == sorted(arr)
 
 
 def test_recursive_mr1_multiple_duplicates():
@@ -154,6 +169,7 @@ def test_recursive_mr1_multiple_duplicates():
     result1 = bubble_sort_recursive(arr.copy())
     result2 = bubble_sort_recursive(arr[::-1])
     assert result1 == result2
+    assert result1 == sorted(arr)
 
 
 def test_recursive_mr1_large():
@@ -162,6 +178,7 @@ def test_recursive_mr1_large():
     result1 = bubble_sort_recursive(arr.copy())
     result2 = bubble_sort_recursive(arr[::-1])
     assert result1 == result2
+    assert result1 == sorted(arr)
 
 
 # ============= RECURSIVE VERSION - MR2: PERMUTATION RELATION =============
@@ -174,6 +191,7 @@ def test_recursive_mr2_basic():
     random.shuffle(permuted)
     result2 = bubble_sort_recursive(permuted)
     assert result1 == result2
+    assert result1 == sorted(arr)
 
 
 def test_recursive_mr2_all_duplicates():
@@ -184,6 +202,7 @@ def test_recursive_mr2_all_duplicates():
     random.shuffle(permuted)
     result2 = bubble_sort_recursive(permuted)
     assert result1 == result2
+    assert result1 == sorted(arr)
 
 
 def test_recursive_mr2_negative():
@@ -194,6 +213,7 @@ def test_recursive_mr2_negative():
     random.shuffle(permuted)
     result2 = bubble_sort_recursive(permuted)
     assert result1 == result2
+    assert result1 == sorted(arr)
 
 
 def test_recursive_mr2_multiple_duplicates():
@@ -204,6 +224,7 @@ def test_recursive_mr2_multiple_duplicates():
     random.shuffle(permuted)
     result2 = bubble_sort_recursive(permuted)
     assert result1 == result2
+    assert result1 == sorted(arr)
 
 
 def test_recursive_mr2_large():
@@ -214,3 +235,4 @@ def test_recursive_mr2_large():
     random.shuffle(permuted)
     result2 = bubble_sort_recursive(permuted)
     assert result1 == result2
+    assert result1 == sorted(arr)
